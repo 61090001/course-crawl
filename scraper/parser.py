@@ -147,12 +147,12 @@ class MITParser(Parser):
                     continue
                 instructors = instructors.split(', ')
                 for instructor in instructors:
-                    if not pool:
+                    if pool is None:
                         professors.append(Professor(instructor))
                     else:
                         if not (instructor.lower() in pool):
                             pool[instructor.lower()] = Professor(instructor)
-                        professors.append(self.pool[instructor.lower()])
+                        professors.append(pool[instructor.lower()])
 
                 list_courses.append(Course(courseid=courseid, coursename=coursename, professors=professors))
         except Exception as e:
@@ -218,12 +218,12 @@ class UCBerkeleyParser(Parser):
                     continue
                 instructors = instructors.split(', ')
                 for instructor in instructors:
-                    if not pool:
+                    if pool is None:
                         professors.append(Professor(instructor))
                     else:
                         if not (instructor.lower() in pool):
                             pool[instructor.lower()] = Professor(instructor)
-                        professors.append(self.pool[instructor.lower()])
+                        professors.append(pool[instructor.lower()])
                 
                 list_courses.append(Course(courseid=courseid, coursename=coursename, professors=professors))
         except Exception as e:
