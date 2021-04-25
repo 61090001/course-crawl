@@ -10,8 +10,8 @@ http = urllib3.PoolManager()
 
 class Crawler:
 
-    def __init__(self, url, parser, max_depth=0, pool=None):
-        self.url = url
+    def __init__(self, urls, parser, max_depth=0, pool=None):
+        self.urls = urls
         self.parser = parser
         self.max_depth = max_depth
         self.queue = deque()
@@ -35,11 +35,11 @@ class Crawler:
             log.error(f"Error: {str(e)}")
             return
 
-    def scrape(self, url):
-        self.queue.append(url)
+    def scrape(self, urls):
+        self.queue.extend(urls)
         depth = self.max_depth
         levels = deque()
-        counter = 0
+        counter = len(urls)
 
         while len(self.queue) > 0:
             url = self.queue.popleft()
@@ -54,15 +54,15 @@ class Crawler:
             self.crawled_data.extend(data)
             if depth == 0:
                 continue
-            links = parser.get_follow_links()
-            levels.append(len(links))
-            for link in links:
-                self.queue.append(urljoin(url,link))
-            if counter == 0:
-                depth -= 1
-                counter = levels.popleft()
-                continue
+            hyperlinks = parser.get_follow_links()
+            levels.append(len(hyperlinks))
+            for hyperlink in hyperlinks:
+                self.queue.append(urljoin(url,hyperlink))
             counter -= 1
+            if counter == 0:
+                while len(levels) > 0:
+                    counter += levels.popleft()
+                depth -= 1
     
     def reset(self):
         self.queue = deque()
@@ -71,4 +71,4 @@ class Crawler:
     
     def run(self):
         self.reset()
-        self.scrape(self.url)
+        self.scrape(self.urls)

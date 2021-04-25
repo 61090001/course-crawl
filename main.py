@@ -20,19 +20,19 @@ if __name__ == '__main__':
     log = logger.get_logger(__name__)
 
     url = 'https://www.ic.kmitl.ac.th/index.php/programs/undergraduate/software-engineering'
-    crawler = Crawler(url=url, parser=ICKMITLParser, max_depth=1)
+    crawler = Crawler(urls=[url], parser=ICKMITLParser, max_depth=1)
     crawler.run()
     for item in crawler.get_crawled_data():
        log.debug(f'Item: {len(item.professors)} {str(item)}')
 
     url = 'http://catalog.mit.edu/subjects/'
-    crawler = Crawler(url=url, parser=MITParser, max_depth=1)
+    crawler = Crawler(urls=[url], parser=MITParser, max_depth=1)
     crawler.run()
     for item in crawler.get_crawled_data():
         log.debug(f'Item: {len(item.professors)} {str(item)}')
 
     url = 'http://guide.berkeley.edu/courses/'
-    crawler = Crawler(url=url, parser=UCBerkeleyParser, max_depth=1)
+    crawler = Crawler(urls=[url], parser=UCBerkeleyParser, max_depth=1)
     crawler.run()
     for item in crawler.get_crawled_data():
         log.debug(f'Item: {len(item.professors)} {str(item)}')
